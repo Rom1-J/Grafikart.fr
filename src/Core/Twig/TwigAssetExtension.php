@@ -78,7 +78,7 @@ class TwigAssetExtension extends AbstractExtension
             return $request ? "http://{$request->getHost()}:3000/{$name}" : '';
         }
 
-        $name = $this->getAssetPaths()[$name] ?? '';
+        $name = $this->getAssetPaths()[$name]['file'] ?? '';
 
         return "/assets/$name";
     }
@@ -105,19 +105,6 @@ class TwigAssetExtension extends AbstractExtension
                 $this->polyfillLoaded = true;
                 $script = <<<HTML
                     <script src="//unpkg.com/@ungap/custom-elements" defer></script>
-                    $script
-                HTML;
-            }
-        }
-
-        // Si on est en mode développement on injecte le système de Hot Reload de vite
-        if (!$this->isProduction) {
-            $request = $this->requestStack->getCurrentRequest();
-            if ($request) {
-                $script = <<<HTML
-                    <script type="module">
-                    import "//{$request->getHost()}:3000/vite/client"
-                    </script>
                     $script
                 HTML;
             }

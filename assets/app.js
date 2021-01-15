@@ -11,12 +11,15 @@ import ChoicesJS from 'choices.js'
 import { $$, $ } from '/functions/dom.js'
 import { registerKonami, registerBadgeAlert } from '/modules/badges.js'
 import { registerWindowHeightCSS } from '/modules/window.js'
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+
 
 registerKonami()
 registerBadgeAlert()
 registerWindowHeightCSS()
 
 document.addEventListener('turbolinks:load', () => {
+  clearAllBodyScrollLocks()
   const darkToggle = document.querySelector('#dark-toggle')
   if (darkToggle) {
     darkToggle.addEventListener('click', e => {
@@ -28,9 +31,14 @@ document.addEventListener('turbolinks:load', () => {
 
   // Header toggle
   const burgerButton = $('#js-burger')
+  const headerNav = $('.header-nav')
   if (burgerButton) {
+    let open = false;
     burgerButton.addEventListener('click', () => {
       $('#header').classList.toggle('is-open')
+
+      open ? enableBodyScroll(headerNav) : disableBodyScroll(headerNav)
+      open = !open
     })
   }
 
@@ -40,7 +48,9 @@ document.addEventListener('turbolinks:load', () => {
       new ChoicesJS(s, {
         placeholder: true,
         shouldSort: false,
-        itemSelectText: ''
+        itemSelectText: '',
+        maxItemCount: s.dataset.limit || -1,
+        maxItemText: s.dataset.limit && `Vous ne pouvez sélectionner que ${s.dataset.limit} éléments`
       })
   )
 })

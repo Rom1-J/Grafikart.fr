@@ -18,14 +18,16 @@ class ProfileUpdateDto
 {
     /**
      * @Assert\NotBlank()
+     * @Assert\Length(min=5, max=100)
+     * @Assert\Email()
      */
     public string $email;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(normalizer="trim")
      * @Assert\Length(min=3, max=40)
      */
-    public string $username;
+    public string $username = '';
 
     /**
      * @Assert\NotBlank()
@@ -52,5 +54,12 @@ class ProfileUpdateDto
     public function getId(): int
     {
         return $this->user->getId() ?: 0;
+    }
+
+    public function setUsername(?string $username): self
+    {
+        $this->username = $username ?: '';
+
+        return $this;
     }
 }

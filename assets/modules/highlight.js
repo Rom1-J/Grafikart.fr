@@ -1,6 +1,6 @@
 import scriptjs from 'scriptjs'
 
-const lazylangs = ['typescript', 'elixir', 'less', 'stylus', 'scss', 'sass', 'yaml']
+const lazylangs = ['typescript', 'elixir', 'less', 'stylus', 'scss', 'sass', 'yaml', 'twig']
 
 /**
  * Ajoute highlightjs sur les éléments sélectionnés
@@ -9,6 +9,7 @@ const lazylangs = ['typescript', 'elixir', 'less', 'stylus', 'scss', 'sass', 'ya
  */
 function highlight ($codes) {
   $codes.forEach(code => {
+    code.parentNode.classList.add('with-syntax')
     let lazy = false
     let cls = code.getAttribute('class')
     if (cls === null) {

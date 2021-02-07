@@ -62,11 +62,12 @@ class ProgressionSubscriber implements EventSubscriberInterface
             // On récupère les Ids des tutoriels dans la formation qui ne sont pas le tutoriel de l'évènement
             $courseIds = $courses
                 ->map(fn (Course $c) => $c->getId())
-                ->filter(fn (int $id) => $id !== $event->getContent()->getId())
+                ->filter(fn (?int $id) => $id !== $event->getContent()->getId())
                 ->getValues();
             // On compte le nbre de tutoriels finis
             $count = $repository->count([
                 'content' => $courseIds,
+                'author' => $event->getUser()->getId(),
                 'progress' => Progress::TOTAL,
             ]) + 1;
 

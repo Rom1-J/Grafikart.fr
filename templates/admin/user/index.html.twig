@@ -12,6 +12,7 @@
         <th>{{ sort_by(rows, 'ID', 'row.id') }}</th>
         <th>Pseudo</th>
         <th>Email</th>
+        <th>Inscription</th>
         <th>Premium</th>
         <th class="text-right">Actions</th>
       </tr>
@@ -29,6 +30,9 @@
             {{ user.email }}
           </td>
           <td class="dashboard-id">
+            {{ user.createdAt | format_datetime(pattern="dd MMM. yyyy à kk:mm") }}
+          </td>
+          <td class="dashboard-id">
               {{ user.premium ? user.premiumEnd | ago('Pour') : '' }}
           </td>
           <td>
@@ -41,7 +45,7 @@
               </form>
               {% endif %}
               <a href="{{ path('admin_transaction_index', {q: 'user:' ~ user.id}) }}" class="btn-secondary">{{ icon('refund') }} Transactions</a>
-              <form action="{{ path(prefix ~ '_ban', {id: user.id}) }}" method="post" onsubmit="return confirm('Voulez vous vraiment bannir cet utilisateur ?')">
+              <form action="{{ path(prefix ~ '_ban', {id: user.id}) }}" method="post" onsubmit="return confirm('Voulez-vous vraiment bannir cet utilisateur ?')">
                 <button class="btn-danger" type="submit" {{ user.premium or user.banned ? 'disabled' : '' }}>
                   {{ icon('delete') }} {{ user.banned ? 'Banni !' : 'Bannir' }}
                 </button>

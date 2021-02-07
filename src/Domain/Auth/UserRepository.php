@@ -2,7 +2,7 @@
 
 namespace App\Domain\Auth;
 
-use App\Core\Orm\AbstractRepository;
+use App\Infrastructure\Orm\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -72,14 +72,20 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         $this->_em->flush();
     }
 
-    public function cleanUsers(): int
+    /**
+     * @return User[]
+     */
+    public function clean(): array
     {
-        return $this->createQueryBuilder('u')
+        $query = $this->createQueryBuilder('u')
             ->where('u.deleteAt IS NOT NULL')
-            ->andWhere('u.deleteAt < NOW()')
-            ->delete(User::class, 'u')
-            ->getQuery()
-            ->execute();
+            ->andWhere('u.deleteAt < NOW()');
+
+        /** @var User[] $users */
+        $users = $query->getQuery()->getResult();
+        $query->delete(User::class, 'u')->getQuery()->execute();
+
+        return $users;
     }
 
     /**

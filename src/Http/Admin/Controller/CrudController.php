@@ -2,8 +2,8 @@
 
 namespace App\Http\Admin\Controller;
 
-use App\Core\Helper\Paginator\PaginatorInterface;
 use App\Domain\Application\Entity\Content;
+use App\Helper\Paginator\PaginatorInterface;
 use App\Http\Admin\Data\CrudDataInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -59,7 +59,7 @@ abstract class CrudController extends BaseController
             ->createQueryBuilder('row')
             ->orderBy('row.createdAt', 'DESC');
         if ($request->get('q')) {
-            $query = $this->applySearch($request->get('q'), $query);
+            $query = $this->applySearch(trim($request->get('q')), $query);
         }
         $this->paginator->allowSort('row.id', 'row.title');
         $rows = $this->paginator->paginate($query->getQuery());

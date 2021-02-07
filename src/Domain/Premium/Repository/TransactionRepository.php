@@ -2,9 +2,9 @@
 
 namespace App\Domain\Premium\Repository;
 
-use App\Core\Orm\AbstractRepository;
 use App\Domain\Auth\User;
 use App\Domain\Premium\Entity\Transaction;
+use App\Infrastructure\Orm\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -46,7 +46,7 @@ class TransactionRepository extends AbstractRepository
             ->select(
                 "TO_CHAR(t.createdAt, '$label') as date",
                 "TO_CHAR(t.createdAt, '$group') as fulldate",
-                'SUM(t.price - t.tax - t.fee) as amount'
+                'ROUND(SUM(t.price - t.tax - t.fee)) as amount'
             )
             ->groupBy('fulldate', 'date')
             ->where('t.refunded = false')

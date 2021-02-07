@@ -14,6 +14,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->client = self::createClient();
         /** @var EntityManagerInterface $em */
         $em = self::$container->get(EntityManagerInterface::class);
@@ -32,10 +33,18 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
     {
         $this->client->request($method, $url, [], [], [
             'CONTENT_TYPE' => 'application/json',
-            'HTTP_Accept' => 'application/json',
+            'HTTP_ACCEPT' => 'application/json',
         ], $data ? json_encode($data) : null);
 
         return $this->client->getResponse()->getContent();
+    }
+
+    /**
+     * Vérifie si on a un message de succès.
+     */
+    public function expectAlert(string $type): void
+    {
+        $this->assertEquals(1, $this->client->getCrawler()->filter("alert-message[type=\"$type\"], alert-floating[type=\"$type\"]")->count());
     }
 
     /**
@@ -51,7 +60,7 @@ class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
      */
     public function expectSuccessAlert(): void
     {
-        $this->assertEquals(1, $this->client->getCrawler()->filter('alert-message[type="success"], alert-floating[type="success"]')->count());
+        $this->expectAlert('success');
     }
 
     public function expectFormErrors(?int $expectedErrors = null): void

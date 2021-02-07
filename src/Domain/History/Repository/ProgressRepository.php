@@ -2,12 +2,12 @@
 
 namespace App\Domain\History\Repository;
 
-use App\Core\Orm\AbstractRepository;
 use App\Domain\Application\Entity\Content;
 use App\Domain\Auth\User;
 use App\Domain\Course\Entity\Course;
 use App\Domain\Course\Entity\Formation;
 use App\Domain\History\Entity\Progress;
+use App\Infrastructure\Orm\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -72,7 +72,7 @@ class ProgressRepository extends AbstractRepository
      */
     public function findFinishedIdWithin(User $user, array $ids): array
     {
-        return array_map(fn (Progress $p) => $p->getContent()->getId(), $this->createQueryBuilder('p')
+        return array_map(fn (Progress $p) => $p->getContent()->getId() ?: 0, $this->createQueryBuilder('p')
             ->where('p.content IN (:ids)')
             ->andWhere('p.author = :user')
             ->andWhere('p.progress = :total')

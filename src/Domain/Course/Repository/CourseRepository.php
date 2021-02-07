@@ -2,11 +2,11 @@
 
 namespace App\Domain\Course\Repository;
 
-use App\Core\Orm\AbstractRepository;
-use App\Core\Orm\IterableQueryBuilder;
 use App\Domain\Course\Entity\Course;
 use App\Domain\Course\Entity\Technology;
 use App\Domain\Course\Entity\TechnologyUsage;
+use App\Infrastructure\Orm\AbstractRepository;
+use App\Infrastructure\Orm\IterableQueryBuilder;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -54,7 +54,7 @@ class CourseRepository extends AbstractRepository
         return $this->getEntityManager()->createQuery(<<<DQL
             SELECT c
             FROM  $courseClass c
-            JOIN c.technologyUsages ct WITH ct.technology = :technology
+            JOIN c.technologyUsages ct WITH ct.technology = :technology AND ct.secondary = false
             WHERE NOT EXISTS (
                 SELECT t FROM $usageClass t WHERE t.content = c.formation AND t.technology = :technology
             )

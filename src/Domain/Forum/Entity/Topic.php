@@ -3,8 +3,8 @@
 namespace App\Domain\Forum\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
-use App\Core\Twig\CacheExtension\CacheableInterface;
 use App\Domain\Auth\User;
+use App\Http\Twig\CacheExtension\CacheableInterface;
 use App\Infrastructure\Spam\SpammableInterface;
 use App\Infrastructure\Spam\SpamTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Topic implements SpammableInterface, CacheableInterface
 {
+    use SpamTrait;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -91,11 +92,9 @@ class Topic implements SpammableInterface, CacheableInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Domain\Forum\Entity\Message")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private ?Message $lastMessage = null;
-
-    use SpamTrait;
 
     public function __construct()
     {

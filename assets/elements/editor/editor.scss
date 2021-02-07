@@ -22,7 +22,7 @@
   height: calc(100% - 34px);
   width: 100%;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   z-index: 2;
   background: var(--background);
 }
@@ -107,6 +107,7 @@
 .mdeditor .CodeMirror-scroll {
   background: var(--background);
   min-height: 100px;
+  max-height: calc(100vh - 200px);
 }
 .mdeditor .CodeMirror {
   height: auto;

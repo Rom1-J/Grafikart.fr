@@ -15,12 +15,8 @@
       <strong>en avance</strong>
     </div>
     <div class="pricing__item">
-      Visionner les tutoriels
-      <strong>en avance</strong>
-    </div>
-    <div class="pricing__item">
       Voir les vidéos
-      <strong>premium</strong>
+      <a href="{{ path('course_premium') }}"><strong>premium</strong></a>
     </div>
     <div class="pricing__item">
       <strong>Télécharger</strong>
@@ -32,7 +28,7 @@
     </div>
     <div class="pricing__action">
       <premium-button plan="{{ plan.id }}" price="{{ plan.price }}" duration="{{ plan.duration }}" stripe-key="{{ stripeKey() }}" paypal-id="{{ paypalClientId() }}">
-        Devenir premium ({{ plan.duration }} mois)
+        Devenir premium ({{ plan.name }})
       </premium-button>
     </div>
   </div>

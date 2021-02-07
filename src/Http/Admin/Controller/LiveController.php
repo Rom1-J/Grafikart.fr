@@ -2,10 +2,9 @@
 
 namespace App\Http\Admin\Controller;
 
-use App\Core\Helper\Paginator\PaginatorInterface;
 use App\Domain\Live\LiveRepository;
-use App\Domain\Live\LiveService;
 use App\Domain\Live\LiveSyncService;
+use App\Helper\Paginator\PaginatorInterface;
 use App\Infrastructure\Youtube\YoutubeScopes;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,15 +17,13 @@ class LiveController extends BaseController
      */
     public function index(
         LiveRepository $liveRepository,
-        PaginatorInterface $paginator,
-        LiveService $service
+        PaginatorInterface $paginator
     ): Response {
         $lives = $paginator->paginate($liveRepository->queryAll());
 
         return $this->render('admin/live/index.html.twig', [
             'lives' => $lives,
             'menu' => 'live',
-            'live' => $service->getCurrentLive(),
         ]);
     }
 
